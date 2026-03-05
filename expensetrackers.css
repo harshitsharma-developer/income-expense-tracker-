@@ -1,0 +1,309 @@
+/* General Body and Layout Styling */
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f7fc;
+  color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  flex-direction: column;
+  background: url(wp7153325.webp);
+  background-size: 100%;
+  background-position: center;
+}
+
+/* Container for the Forms */
+#registerContainer, #loginContainer {
+  width: 120%;
+  max-width: 400px;
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 12px 24px rgba(25, 208, 225, 0.1);
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Header Styling */
+h1 {
+  font-size: 28px;
+  color: #4CAF50;
+  margin-bottom: 20px;
+}
+
+/* Form Inputs */
+input[type="email"], input[type="password"], input[type="text"], input[type="number"] {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  background-color: #f9f9f9;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Focus State for Input Fields */
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="text"]:focus,
+input[type="number"]:focus {
+  border-color: #007BFF;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+  outline: none;
+}
+
+/* Buttons Styling */
+button {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  background: linear-gradient(145deg, #007BFF, #0056b3);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  margin-top: 10px;
+}
+
+button:hover {
+  background: linear-gradient(145deg, #0056b3, #007BFF);
+  transform: scale(1.05);
+}
+
+/* Expense Tracker UI Styling */
+.container {
+  width: 50%;
+  max-width: 400px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 12px 24px rgba(122, 109, 109, 0.1);
+  padding: 1%;
+  display: none; /* Hidden by default */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.2);
+}
+
+/* Balance Section */
+h4 {
+  font-size: 18px;
+  color: #666;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+#balance {
+  font-size: 36px;
+  color: #4CAF50;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Income and Expense Container */
+.inc-exp-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+/* Income/Expense Box Styling */
+.inc-exp-container div {
+  text-align: center;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.inc-exp-container div:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.inc-exp-container h4 {
+  font-size: 16px;
+  color: #444;
+}
+
+.money-plus {
+  font-size: 24px;
+  font-weight: 600;
+  color: #4CAF50;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.money-plus:hover {
+  transform: scale(1.1);
+  color: #388e3c;
+}
+
+.money-minus {
+  font-size: 24px;
+  font-weight: 600;
+  color: #F44336;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.money-minus:hover {
+  transform: scale(1.1);
+  color: #d32f2f;
+}
+
+/* Add New Transaction Form */
+.form-control {
+  margin-bottom: 15px;
+}
+
+.form-control label {
+  font-size: 14px;
+  color: #333;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-control input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-control input:focus {
+  border-color: #007BFF;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+  outline: none;
+}
+
+/* Logout Button */
+#logoutBtn {
+  background: #f44336;
+  width: 100%;
+  padding: 12px;
+  border: none;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  margin-top: 20px;
+}
+
+#logoutBtn:hover {
+  background: #d32f2f;
+  transform: scale(1.05);
+}
+
+/* Responsive Design: Mobile View */
+@media (max-width: 768px) {
+  /* Center forms and containers */
+  body {
+    padding: 20px;
+  }
+
+  #registerContainer, #loginContainer, .container {
+    width: 100%;
+    max-width: 100%;
+    padding: 15px;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  #balance {
+    font-size: 28px;
+  }
+
+  .form-control input, button {
+    font-size: 14px;
+  }
+}
+
+/* Container for the forms */
+div {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  padding: 45px;
+  width: 300px;
+  margin: 20px;
+  margin-left:10px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover effect to create a lift effect */
+div:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.2);
+}
+
+/* Heading */
+h1 {
+  font-size: 26px;
+  margin-bottom: 10px;
+  text-align: center;
+  color: #333;
+  font-weight: 600;
+}
+
+/* Form Layout */
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Input Fields */
+input[type="email"],
+input[type="password"] {
+  padding: 12px 15px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus {
+  border-color: #4CAF50; /* Green border on focus */
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.3); /* Subtle green glow */
+  outline: none;
+}
+
+/* Button Styling */
+button {
+  padding: 12px;
+  font-size: 16px;
+  background: linear-gradient(145deg, #007BFF, #0056b3); /* Blue gradient background */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background: linear-gradient(145deg, #0056b3, #007BFF); /* Hover effect with gradient swap */
+  transform: scale(1.05); /* Slight grow effect on hover */
+}
+
+button:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+}
+
+/* Optional: Add a message between forms for a cleaner UX */
+form {
+  margin-top: 40px;
+}

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expense Tracker with User Login</title>
+  <link rel="stylesheet" href="expensetrackers.css">
+</head>
+<body>
+  <h2>Expense Tracker</h2>
+  
+  <!-- Registration Form -->
+ <div>
+    <h1>Register</h1>
+    <form id="registerForm">
+      <input type="email" id="registerEmail" placeholder="Enter email" required />
+      <input type="password" id="registerPassword" placeholder="Enter password" required />
+      <button type="submit">sumbit</button>
+    </form>
+  </div>
+
+  <!--Login Form --->
+  <div>
+    <h1>Login</h1>
+    <form id="loginForm">
+      <input type="email" id="loginEmail" placeholder="Enter email" required />
+      <input type="password" id="loginPassword" placeholder="Enter password" required />
+      <button type="submit">Login</button>
+    </form>
+  </div>
+  
+ 
+
+  <!-- Expense Tracker UI -->
+  <div class="container" id="expenseTracker" style="display: none;">
+    <h4>Your Balance</h4>
+    <h1 id="balance">&#8377;0.00</h1>
+    <div class="inc-exp-container">
+      <div>
+        <h4>Income</h4>
+        <p id="money-plus" class="money-plus">+&#8377;0.00</p>
+      </div>
+      <div>
+        <h4>Expense</h4>
+        <p id="money-minus" class="money-minus">-&#8377;0.00</p>
+      </div>
+    </div>
+    <h3>History</h3>
+    <ul id="list" class="list"></ul>
+    <h3>Add New Transaction</h3>
+    <form id="form">
+      <div class="form-control">
+        <label for="text">Text</label>
+        <input type="text" id="text" placeholder="Enter transaction name" />
+      </div>
+      <div class="form-control">
+        <label for="amount">Amount <br> (negative - expense, positive - income)</label>
+        <input type="number" id="amount" placeholder="Enter amount" />
+      </div>
+      <button class="btn">Add Transaction</button>
+    </form>
+    <button id="logoutBtn" class="btn">Logout</button>
+  </div>
+
+  <!-- Firebase and App Logic -->
+  <script src="trackerscript.js" type="module"></script>
+</body>
+</html>
