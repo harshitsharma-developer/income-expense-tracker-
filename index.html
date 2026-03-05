@@ -5,61 +5,182 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Expense Tracker with User Login</title>
   <link rel="stylesheet" href="expensetrackers.css">
+  <!-- Material Icons (MUI-style) -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
 </head>
 <body>
-  <h2>Expense Tracker</h2>
-  
-  <!-- Registration Form -->
- <div>
-    <h1>Register</h1>
-    <form id="registerForm">
-      <input type="email" id="registerEmail" placeholder="Enter email" required />
-      <input type="password" id="registerPassword" placeholder="Enter password" required />
-      <button type="submit">sumbit</button>
-    </form>
-  </div>
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="app-header-left">
+        <span class="material-icons-outlined app-logo-icon">account_balance_wallet</span>
+        <div class="app-logo-text">
+          <span class="app-title">Expense Tracker</span>
+          <span class="app-subtitle">Smart income &amp; expense manager</span>
+        </div>
+      </div>
+      <div class="app-header-right">
+        <div id="currentUserChip" class="user-chip" style="display: none;">
+          <span class="material-icons-outlined user-chip-icon">person</span>
+          <span id="currentUserEmail" class="user-chip-email"></span>
+        </div>
+        <button id="headerAuthToggle" class="btn-secondary">
+          <span class="material-icons-outlined">person_add_alt</span>
+          <span class="header-auth-label">Register</span>
+        </button>
+        <button id="headerLogoutShortcut" class="btn-secondary" style="display: none;">
+          <span class="material-icons-outlined">logout</span>
+          <span>Logout</span>
+        </button>
+      </div>
+    </header>
 
-  <!--Login Form --->
-  <div>
-    <h1>Login</h1>
-    <form id="loginForm">
-      <input type="email" id="loginEmail" placeholder="Enter email" required />
-      <input type="password" id="loginPassword" placeholder="Enter password" required />
-      <button type="submit">Login</button>
-    </form>
-  </div>
-  
- 
+    <main class="app-main">
+      <section class="auth-section">
+        <div class="auth-tabs">
+          <button class="auth-tab active" data-target="login">Login</button>
+          <button class="auth-tab" data-target="register">Register</button>
+        </div>
 
-  <!-- Expense Tracker UI -->
-  <div class="container" id="expenseTracker" style="display: none;">
-    <h4>Your Balance</h4>
-    <h1 id="balance">&#8377;0.00</h1>
-    <div class="inc-exp-container">
-      <div>
-        <h4>Income</h4>
-        <p id="money-plus" class="money-plus">+&#8377;0.00</p>
-      </div>
-      <div>
-        <h4>Expense</h4>
-        <p id="money-minus" class="money-minus">-&#8377;0.00</p>
-      </div>
-    </div>
-    <h3>History</h3>
-    <ul id="list" class="list"></ul>
-    <h3>Add New Transaction</h3>
-    <form id="form">
-      <div class="form-control">
-        <label for="text">Text</label>
-        <input type="text" id="text" placeholder="Enter transaction name" />
-      </div>
-      <div class="form-control">
-        <label for="amount">Amount <br> (negative - expense, positive - income)</label>
-        <input type="number" id="amount" placeholder="Enter amount" />
-      </div>
-      <button class="btn">Add Transaction</button>
-    </form>
-    <button id="logoutBtn" class="btn">Logout</button>
+        <div class="auth-forms">
+          <!-- Login Form -->
+          <div id="loginContainer" class="auth-card">
+            <h1>Welcome back</h1>
+            <p class="auth-description">Sign in to see and manage all your transactions.</p>
+            <form id="loginForm">
+              <label class="field-label" for="loginEmail">Email</label>
+              <div class="field-wrapper">
+                <span class="material-icons-outlined field-icon">mail</span>
+                <input type="email" id="loginEmail" placeholder="you@example.com" required />
+              </div>
+
+              <label class="field-label" for="loginPassword">Password</label>
+              <div class="field-wrapper">
+                <span class="material-icons-outlined field-icon">lock</span>
+                <input type="password" id="loginPassword" placeholder="Enter your password" required />
+                <button type="button" class="field-eye" data-target="loginPassword">
+                  <span class="material-icons-outlined">visibility_off</span>
+                </button>
+              </div>
+
+              <button type="submit" class="btn-primary">
+                <span class="material-icons-outlined">login</span>
+                <span>Login</span>
+              </button>
+            </form>
+          </div>
+
+          <!-- Registration Form -->
+          <div id="registerContainer" class="auth-card auth-card--hidden">
+            <h1>Create account</h1>
+            <p class="auth-description">Register once and keep your income &amp; expenses in sync.</p>
+            <form id="registerForm">
+              <label class="field-label" for="registerEmail">Email</label>
+              <div class="field-wrapper">
+                <span class="material-icons-outlined field-icon">person_add</span>
+                <input type="email" id="registerEmail" placeholder="you@example.com" required />
+              </div>
+
+              <label class="field-label" for="registerPassword">Password</label>
+              <div class="field-wrapper">
+                <span class="material-icons-outlined field-icon">vpn_key</span>
+                <input type="password" id="registerPassword" placeholder="Create a strong password" required />
+                <button type="button" class="field-eye" data-target="registerPassword">
+                  <span class="material-icons-outlined">visibility_off</span>
+                </button>
+              </div>
+
+              <button type="submit" class="btn-primary">
+                <span class="material-icons-outlined">person_add</span>
+                <span>Register</span>
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Left hero shown after login -->
+        <div id="trackerHero" class="auth-card tracker-hero" style="display: none;">
+          <span class="material-icons-outlined tracker-hero-icon">insights</span>
+          <h1>All your money in one clear view</h1>
+          <p class="auth-description">
+            Watch your income, expenses, and balance update in real time — stay fully in control of every rupee.
+          </p>
+        </div>
+      </section>
+
+      <!-- Right side: hero (before login) and tracker (after login) -->
+      <section class="tracker-section">
+        <div id="authHero" class="auth-hero-card">
+          <div class="auth-hero-glow"></div>
+          <div class="auth-hero-icon-wrap">
+            <span id="authHeroIcon" class="material-icons-outlined auth-hero-icon">login</span>
+          </div>
+          <div class="auth-hero-text">
+            <h2 id="authHeroTitle">Welcome back</h2>
+            <p id="authHeroSubtitle">
+              Sign in to unlock your personal expense dashboard and see where every rupee goes.
+            </p>
+          </div>
+        </div>
+
+        <div class="container" id="expenseTracker">
+          <div class="tracker-header">
+            <div>
+              <h4>Your Balance</h4>
+              <h1 id="balance">&#8377;0.00</h1>
+            </div>
+            <button id="logoutBtn" class="btn-icon">
+              <span class="material-icons-outlined">logout</span>
+              <span>Logout</span>
+            </button>
+          </div>
+
+          <div class="inc-exp-container">
+            <div class="stat-card income-card">
+              <div class="stat-header">
+                <span class="material-icons-outlined stat-icon">trending_up</span>
+                <h4>Income</h4>
+              </div>
+              <p id="money-plus" class="money-plus">+&#8377;0.00</p>
+            </div>
+            <div class="stat-card expense-card">
+              <div class="stat-header">
+                <span class="material-icons-outlined stat-icon">trending_down</span>
+                <h4>Expense</h4>
+              </div>
+              <p id="money-minus" class="money-minus">-&#8377;0.00</p>
+            </div>
+          </div>
+
+          <div class="section-header">
+            <span class="material-icons-outlined section-icon">history</span>
+            <h3>History</h3>
+          </div>
+          <ul id="list" class="list"></ul>
+
+          <div class="section-header">
+            <span class="material-icons-outlined section-icon">add_circle</span>
+            <h3>Add New Transaction</h3>
+          </div>
+          <form id="form" class="transaction-form">
+            <div class="form-control">
+              <label for="text">Title</label>
+              <input type="text" id="text" placeholder="E.g. Salary, Groceries, Rent" />
+            </div>
+            <div class="form-control">
+              <label for="amount">Amount <span class="hint">(negative for expense, positive for income)</span></label>
+              <input type="number" id="amount" placeholder="Enter amount in INR" />
+            </div>
+            <button class="btn-primary" type="submit">
+              <span class="material-icons-outlined">add_circle</span>
+              <span>Add Transaction</span>
+            </button>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <!-- Snackbar root for MUI-style messages -->
+    <div id="snackbar-root"></div>
   </div>
 
   <!-- Firebase and App Logic -->

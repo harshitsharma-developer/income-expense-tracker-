@@ -32,6 +32,141 @@ const text = document.getElementById("text");
 const amount = document.getElementById("amount");
 const logoutBtn = document.getElementById("logoutBtn");
 
+// Header + snackbar elements
+const authTabs = document.querySelectorAll(".auth-tab");
+const loginCard = document.getElementById("loginContainer");
+const registerCard = document.getElementById("registerContainer");
+const authSection = document.querySelector(".auth-section");
+const headerAuthToggle = document.getElementById("headerAuthToggle");
+const headerLogoutShortcut = document.getElementById("headerLogoutShortcut");
+const currentUserChip = document.getElementById("currentUserChip");
+const currentUserEmailEl = document.getElementById("currentUserEmail");
+const snackbarRoot = document.getElementById("snackbar-root");
+const headerAuthLabel =
+  headerAuthToggle?.querySelector(".header-auth-label") || null;
+const authTabsWrapper = document.querySelector(".auth-tabs");
+const authFormsWrapper = document.querySelector(".auth-forms");
+const trackerHero = document.getElementById("trackerHero");
+const authHero = document.getElementById("authHero");
+const authHeroIcon = document.getElementById("authHeroIcon");
+const authHeroTitle = document.getElementById("authHeroTitle");
+const authHeroSubtitle = document.getElementById("authHeroSubtitle");
+
+const showSnackbar = (variant, message) => {
+  if (!snackbarRoot) {
+    // Fallback to alert if root not found
+    alert(message);
+    return;
+  }
+
+  const snackbar = document.createElement("div");
+  snackbar.className = `snackbar snackbar--${variant}`;
+
+  let icon = "check_circle";
+  if (variant === "error") icon = "error_outline";
+  else if (variant === "warning") icon = "warning_amber";
+  else if (variant === "info") icon = "info";
+
+  snackbar.innerHTML = `
+    <span class="material-icons-outlined snackbar__icon">${icon}</span>
+    <span class="snackbar__message">${message}</span>
+  `;
+
+  snackbarRoot.appendChild(snackbar);
+
+  // Trigger animation
+  requestAnimationFrame(() => {
+    snackbar.classList.add("snackbar--visible");
+  });
+
+  setTimeout(() => {
+    snackbar.classList.remove("snackbar--visible");
+    snackbar.addEventListener(
+      "transitionend",
+      () => {
+        snackbar.remove();
+      },
+      { once: true }
+    );
+  }, 3500);
+};
+
+let currentAuthView = "login";
+
+const setAuthView = (view) => {
+  const isLogin = view === "login";
+  currentAuthView = view;
+
+  authTabs.forEach((tab) => {
+    tab.classList.toggle("active", tab.dataset.target === view);
+  });
+
+  if (loginCard && registerCard) {
+    loginCard.classList.toggle("auth-card--hidden", !isLogin);
+    registerCard.classList.toggle("auth-card--hidden", isLogin);
+  }
+
+  if (headerAuthToggle && headerAuthLabel) {
+    const iconEl = headerAuthToggle.querySelector(".material-icons-outlined");
+
+    if (isLogin) {
+      if (iconEl) iconEl.textContent = "person_add_alt";
+      headerAuthLabel.textContent = "Register";
+    } else {
+      if (iconEl) iconEl.textContent = "login";
+      headerAuthLabel.textContent = "Login";
+    }
+  }
+
+  if (
+    authHero &&
+    authHeroIcon &&
+    authHeroTitle &&
+    authHeroSubtitle &&
+    !auth.currentUser
+  ) {
+    if (isLogin) {
+      authHeroIcon.textContent = "login";
+      authHeroTitle.textContent = "Welcome back";
+      authHeroSubtitle.textContent =
+        "Sign in to unlock your personal expense dashboard and see where every rupee goes.";
+    } else {
+      authHeroIcon.textContent = "person_add_alt";
+      authHeroTitle.textContent = "Create your free account";
+      authHeroSubtitle.textContent =
+        "Register once and keep your income and expenses safe in the cloud.";
+    }
+  }
+};
+
+authTabs.forEach((tab) => {
+  tab.addEventListener("click", () => {
+    const target = tab.dataset.target;
+    setAuthView(target);
+  });
+});
+
+// Password visibility toggles
+const passwordToggleButtons = document.querySelectorAll(".field-eye");
+
+passwordToggleButtons.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const targetId = btn.dataset.target;
+    if (!targetId) return;
+
+    const input = document.getElementById(targetId);
+    if (!input) return;
+
+    const isHidden = input.type === "password";
+    input.type = isHidden ? "text" : "password";
+
+    const icon = btn.querySelector(".material-icons-outlined");
+    if (icon) {
+      icon.textContent = isHidden ? "visibility" : "visibility_off";
+    }
+  });
+});
+
 // Register User
 registerForm.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -40,10 +175,11 @@ registerForm.addEventListener("submit", async (e) => {
 
   try {
     await createUserWithEmailAndPassword(auth, email, password);
-    alert("User registered successfully!");
+    showSnackbar("success", "User registered successfully");
+    setAuthView("login");
   } catch (error) {
     console.error("Error registering user:", error);
-    alert(error.message);
+    showSnackbar("error", error.message);
   }
 });
 
@@ -55,10 +191,10 @@ loginForm.addEventListener("submit", async (e) => {
 
   try {
     await signInWithEmailAndPassword(auth, email, password);
-    alert("User logged in successfully!");
+    showSnackbar("success", "Logged in successfully");
   } catch (error) {
     console.error("Error logging in user:", error);
-    alert(error.message);
+    showSnackbar("error", error.message);
   }
 });
 
@@ -66,12 +202,37 @@ loginForm.addEventListener("submit", async (e) => {
 logoutBtn.addEventListener("click", async () => {
   try {
     await signOut(auth);
-    alert("User logged out!");
+    showSnackbar("info", "Logged out");
   } catch (error) {
     console.error("Error logging out:", error);
-    alert(error.message);
+    showSnackbar("error", error.message);
   }
 });
+
+if (headerLogoutShortcut) {
+  headerLogoutShortcut.addEventListener("click", async () => {
+    try {
+      await signOut(auth);
+      showSnackbar("info", "Logged out");
+    } catch (error) {
+      console.error("Error logging out:", error);
+      showSnackbar("error", error.message);
+    }
+  });
+}
+
+if (headerAuthToggle) {
+  headerAuthToggle.addEventListener("click", () => {
+    const nextView = currentAuthView === "login" ? "register" : "login";
+    setAuthView(nextView);
+    showSnackbar(
+      "info",
+      nextView === "login"
+        ? "Use the login form on the left"
+        : "Use the register form on the left"
+    );
+  });
+}
 
 // Add Transaction
 form.addEventListener("submit", async (e) => {
@@ -86,7 +247,7 @@ form.addEventListener("submit", async (e) => {
 
     try {
       await addDoc(collection(db, "users", user.uid, "transactions"), transaction);
-      alert("Transaction added!");
+      showSnackbar("success", "Transaction added");
       fetchUserTransactions(user.uid);
     } catch (error) {
       console.error("Error adding transaction:", error);
@@ -95,7 +256,7 @@ form.addEventListener("submit", async (e) => {
     text.value = "";
     amount.value = "";
   } else {
-    alert("Please log in to add transactions.");
+    showSnackbar("warning", "Please log in to add transactions first");
   }
 });
 
@@ -112,7 +273,29 @@ const fetchUserTransactions = async (uid) => {
     querySnapshot.forEach((doc) => {
       const { text, amount } = doc.data();
       const listItem = document.createElement("li");
-      listItem.textContent = `${text} : ₹${amount}`;
+      const isIncome = amount > 0;
+
+      listItem.classList.add(
+        "transaction-item",
+        isIncome ? "income" : "expense"
+      );
+
+      listItem.innerHTML = `
+        <div class="transaction-main">
+          <span class="material-icons-outlined transaction-icon">
+            ${isIncome ? "trending_up" : "trending_down"}
+          </span>
+          <div class="transaction-text">
+            <span class="transaction-title">${text}</span>
+            <span class="transaction-meta">${
+              isIncome ? "Income" : "Expense"
+            }</span>
+          </div>
+        </div>
+        <div class="transaction-amount">
+          ${isIncome ? "+" : "-"}₹${Math.abs(amount)}
+        </div>
+      `;
       list.appendChild(listItem);
 
       if (amount > 0) totalIncome += amount;
@@ -131,9 +314,59 @@ const fetchUserTransactions = async (uid) => {
 // Handle Auth State Changes
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    expenseTracker.style.display = "block";
+    if (expenseTracker) {
+      expenseTracker.style.display = "flex";
+    }
+    if (authSection) {
+      authSection.style.display = "flex";
+    }
+    if (authTabsWrapper) {
+      authTabsWrapper.style.display = "none";
+    }
+    if (authFormsWrapper) {
+      authFormsWrapper.style.display = "none";
+    }
+    if (trackerHero) {
+      trackerHero.style.display = "flex";
+    }
+    if (authHero) {
+      authHero.style.display = "none";
+    }
+    if (currentUserChip && currentUserEmailEl) {
+      currentUserChip.style.display = "inline-flex";
+      currentUserEmailEl.textContent = user.email || "";
+    }
+    if (headerAuthToggle && headerLogoutShortcut) {
+      headerAuthToggle.style.display = "none";
+      headerLogoutShortcut.style.display = "inline-flex";
+    }
     fetchUserTransactions(user.uid);
   } else {
-    expenseTracker.style.display = "none";
+    if (expenseTracker) {
+      expenseTracker.style.display = "none";
+    }
+    if (authSection) {
+      authSection.style.display = "flex";
+    }
+    if (authTabsWrapper) {
+      authTabsWrapper.style.display = "inline-flex";
+    }
+    if (authFormsWrapper) {
+      authFormsWrapper.style.display = "flex";
+    }
+    if (trackerHero) {
+      trackerHero.style.display = "none";
+    }
+    if (authHero) {
+      authHero.style.display = "flex";
+    }
+    if (currentUserChip) {
+      currentUserChip.style.display = "none";
+    }
+    if (headerAuthToggle && headerLogoutShortcut) {
+      headerAuthToggle.style.display = "inline-flex";
+      headerLogoutShortcut.style.display = "none";
+    }
+    setAuthView("login");
   }
 });
